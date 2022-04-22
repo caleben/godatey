@@ -1,22 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"reflect"
+	"github.com/caleben/godatey/base64api"
+	"io/ioutil"
 )
 
 func main() {
-	message := "{ \"@timestamp\": \"18/May/2021:08:14:03 +0800\", \"remote_addr\": \"10.20.146.127\", \"remote_user\": \"-\", \"body_bytes_sent\": \"437\", \"request_time\": \"0.000\", \"request_length\": \"171\", \"request\": \"GET /manage/get_hsiar_list HTTP/1.1\", \"request_method\": \"GET\", \"http_content_type\": \"-\", \"upstream_addr\" : \"-\" ,\"upstream_response_time\": \"-\", \"status\": \"200\", \"client_id\": \"-\", \"http_referrer\": \"-\", \"http_x_forwarded_for\": \"-\", \"tid\": \"-\", \"http_user_agent\": \"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)\" }"
-	m := make(map[string]interface{})
-	of := reflect.TypeOf(message)
-	fmt.Printf("%v\n", of)
-	err := json.Unmarshal([]byte(message), &m)
-	if err != nil {
-		fmt.Print(err)
-	} else {
-		for k, v := range m {
-			fmt.Printf("%v    %v\n", k, v)
-		}
-	}
+	//req := "Nzc9MQAxMT00ADMzPXsiaW50ZXJmYWNlIjoieXV4LmRlbW8tZGVmLWNsaWVudCIsImludm9rZS5hdXRoIjoie1wic2lnbmF0dXJlXCI6XCJMZ2VoeW1nWGdURnhuNnErRHpFbFJKekE5UDlJbUFCamRLMEp0VHlaZ3hxdVN0RGlhdUl3Nzl1ZnB4MUY4QWZQckM1dHk4a2Vjd29yV1NpZmwwTWQvaUlyS3VkWlkreDZUR2ZYbjN6M2VnWWxYQXJoYXdRZHBPcDYxQXpvOWdFSkpFNW1RTnhNSERnTGVaazRNWmV2MHgvTUNpNW9xMndGTlZlVkkvbkJ3RXFFc3YzV1F0bytIVmJJK3Z1eHI5YUpXMHF6K1RJSG9zNUhyMW9nOStRcmdJL0ZaWHk1WURUR0p5TU5Wd3h5aDZKZmc3TzBwYkVQKzVVTFhWcXgwcU0vYjBCRVpneU5QcVNHeUIwZjJCbHZLRzBHRnZpZmlULzZmMnVQNkpNeTFWR2VPN1pQYk9XS242Z0c4NGVZTCtjK0RaMzBJTjVnUm0wSWlrSnA1ZFRhaGc9PVwiLFwic2VydmljZVwiOlwieXV4LmRlbW8tZGVmLWNsaWVudFwiLFwiY2VydGlmaWNhdGVcIjpcIk1JSUM4RENDQWRpZ0F3SUJBZ0lKQUtpMi90M0JZU2FjTUEwR0NTcUdTSWIzRFFFQkN3VUFNQkl4RURBT0JnTlZCQU1NQjJoMWJtUnpkVzR3SGhjTk1qSXdNekUzTURneU1EQTFXaGNOTXpJd016RTBNRGd5TURBMVdqQWVNUnd3R2dZRFZRUUREQk41ZFhndVpHVnRieTFrWldZdFkyeHBaVzUwTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF1NFZDd2g2V3lVdVhWTlBzSEhPN2g3L0U4b0QrYVdUZmF5eDVGcjBUT3RiWXZJaUNmQTZpZnovZFhQMkpzSWJOajBWemZjdVZRVlpyOEk1bXZ5MTgrRmlvd2lFOVM2cW1GMUs4NkNHN1hwRHhVdnhNMGIvRFlRczJLM1hNRS92Rk9LN3dKZ2ZIYS9Kd29KaVV1KzVzbHhhVWRkbDhrVlV0Z1NIeWtWZHdSLzFMakNlMjJtSDh3aGgvSkRFUDVNUE1KOFVuSmZ4WVZDcEVHR3EzMGQ4Q2NYbnEyZmxpRUpjeFArQmVWNjIzQk12cEN3dENmWjJBekhGS2xmOFJ6MGdiYzd6bzNuZzQySUVlOEhDRWRwQVQxVVRwelV2b1UyMjhmWDlwUHkxRW5EVS92VkhzTGdoZk4wZjF1K04xdnVDb29FdWZvZXAwYkhObSthamxRTnBIMndJREFRQUJvejB3T3pBNUJnbGdoa2dCaHZoQ0FRMEVMQllxZXlKaGNHbHpTR0Z6YUNJNklpSXNJblpsY25OcGIyNGlPaUl4TGpBaUxDSjBlWEJsSWpvaVV5SjlNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUEza2R3QXNYdXIySC9wUmhpS2xNMVFKWDU0dUJHZi95UWZuenhQR2ZPcFZIVFZ6cDVJbGF2VGE0VUVJc0lRNzlUUXRzdzViejBtVnhxT1JqdldhUUJsWjc1Tkg2SkcxR1kyWktKaEloc1psN2RwN2N6VmhuaVE4NzBIRkk2WW5xWTNxTi81VHVBUmRSZFdIckZDQ0VZSjFSRENBL3UxMm9SdnVBNGhsajhSMXZIM3ZYb2FlNDZ6R1VXSEZFNDM1a2xTdUxJUzRqb2pBaE5sbVBZZThnWU9ZWnVEanRKTHNseUJHd21VV29pQlorYkR3MnRjWlo3bVcvclRBbWlrODVoaGk2TFMrbFQwTjF2L0JPczVGeXRndTAwL0dSVmNxbjl5ZEJsTTY0UFU0L0ZQdzR2NHlyZ2t1VDdmNmxHQ2ZBS2ozcGpNTitzakNWUERJd3AzQTJiMVwiLFwidHlwZVwiOlwiU1wiLFwicmFuZG9tTnVtXCI6MTYsXCJ0aW1lc3RhbXBcIjoxNjQ5MzE5NzA1NDg1fSIsInZlcnNpb24iOiJ2IiwiZ2VuZXJpYyI6InRydWUiLCJ0aW1lb3V0IjoiMTAwMDAiLCJwYXRoIjoieXV4LmRlbW8tZGVmLWNsaWVudCIsImludm9rZS5hdXRoLmhvc3QiOiJOT19IT1NUIiwidHJhY2UuZmxhZyI6bnVsbCwiZ3JvdXAiOiJnIn0AMTM9OAAxND0xNgAzNz0zADU9OTgAMj0zADIzPWcAeXV4YXBwMQB2ADI9NgAzNT1udWxsAAAwAAAAADE9MAA4PQA="
+	res := "Nzc9MQAxMT01NzQ1MjA0ADMzPXt9ADEzPTgAMz0xADE0PTE2ADM3PTIANT0xMTE0MDUANzU9cHVibGljIGFic3RyYWN0IGNvbS5odW5kc3VuLmhzZnVuZC50cmFkZS5iYXNlcHViLnByb3h5LmJhc2VwdWIuYmFzZXB1YmZ1bmN0aW9uLmR0by5PcGVyYXRvckxvZ1BhZ2VSZXNwb25zZSBjb20uaHVuZHN1bi5oc2Z1bmQudHJhZGUuYmFzZXB1Yi5wcm94eS5iYXNlcHViLmJhc2VwdWJmdW5jdGlvbi5zZXJ2aWNlLk9wZXJhdG9yQ2VudGVyU2VydmljZS5nZXRMb2dMaXN0QnlQYWdlKGNvbS5odW5kc3VuLmhzZnVuZC50cmFkZS5iYXNlcHViLnByb3h5LmJhc2VwdWIuYmFzZXB1YmZ1bmN0aW9uLmR0by5PcGVyYXRvckxvZ1BhZ2VSZXF1ZXN0KQA0Mz0xADI9NgAzNT1kOWJkNGE5MGYwZjE0MjMxYjE5OGQ3Y2MyYmNkY2JlNDJmNzcyMjBhNjA3YTQ0MDAAYTAAMAAAAAAxPTg2ADg9AA4hAgMAAAAAAwAAAAEAAABGAAAAAHRvdGFsAEkCAAAAZIwBA19jb3VudMQCAAVyb3dzAFICAAAAZDAAMAAAAAAUIQEDAC8AAAN0eXBlRHMvWAARAAAA"
+	//decode := base64api.Decode(req)
+	decode1 := base64api.Decode(res)
+	_ = ioutil.WriteFile("a.txt", decode1, 0666)
+
+	fmt.Println("res: ", len(res))
+
 }
