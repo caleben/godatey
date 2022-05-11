@@ -1,7 +1,9 @@
 package main
 
-import "github.com/caleben/godatey/json"
+import (
+	"fmt"
+)
 
 func main() {
-	json.Parse()
+	fmt.Printf("this is a main method!")
 }
