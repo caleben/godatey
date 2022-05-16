@@ -10,7 +10,7 @@ const (
 	layoutWithZone = "2006-01-02 15:04:05.000+0800"
 )
 
-func usage(timeStr string) {
+func timeUsage(timeStr string) {
 	input := timeStr
 	fmt.Printf("输入时间字符串: %s\n", timeStr)
 
@@ -25,6 +25,11 @@ func usage(timeStr string) {
 
 	// 获取时间戳10位及13位
 	fmt.Printf("unix时间戳(10): %d, unix时间戳(13): %d\n", localTime.Unix(), localTime.UnixNano()/1e6)
+
+	// 时间戳转化为Time（默认时区为time.local）
+	unixT := 1654086020
+	unixTime := time.Unix(int64(unixT), 123e6)
+	fmt.Printf("时间戳转为Time: %v\n", unixTime)
 
 	// 本地时区转化为UTC
 	utcTime := localTime.UTC()

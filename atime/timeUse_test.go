@@ -11,7 +11,7 @@ func Test_usage(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.give, func(t *testing.T) {
-			usage(tt.give)
+			timeUsage(tt.give)
 		})
 	}
 }
