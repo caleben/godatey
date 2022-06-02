@@ -12,9 +12,9 @@ func main() {
 	dir, _ := os.Getwd()
 	fmt.Println(dir)
 	baseCount := 1000
-	times := flag.Int("n", 1, "日志文件")
-	inputFile := flag.String("c", "file/TraceLog.log", "日志文件")
-	outputFile := flag.String("o", "file/outTrace.log", "日志文件")
+	times := flag.Int("n", 1, "次数n,实际执行循环baseCount*n")
+	inputFile := flag.String("c", "file/TraceLog.log", "src日志文件")
+	outputFile := flag.String("o", "file/outTrace.log", "out日志文件")
 	flag.Parse()
 	fmt.Printf("inputFile is: %v\n", *inputFile)
 	buf, err := ioutil.ReadFile(*inputFile)
