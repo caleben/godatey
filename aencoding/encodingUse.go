@@ -6,6 +6,17 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 )
 
+func chineseIndex() {
+	t := "abc"
+	t2 := "中国字"
+	fmt.Printf("'t = abc'的len: %d---'t2 = 中国字'的len%d\n", len(t), len(t2))
+
+	fmt.Printf("截取t index=2:%v\n", t[0:2])
+	fmt.Printf("截取t2 index=2:%v\n", t2[0:2])
+	runes := string([]rune(t2)[0:2])
+	fmt.Printf("使用string([]rune(t2)[0:2])截取t2 index=2:%v\n", runes)
+}
+
 func encodingUsage(str string) {
 	encoderGbkStr, err := simplifiedchinese.GBK.NewEncoder().String(str)
 	if err != nil {

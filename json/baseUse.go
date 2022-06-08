@@ -3,6 +3,7 @@ package json
 import (
 	"fmt"
 	"github.com/json-iterator/go"
+	"strconv"
 )
 
 func Parse(input string) {
@@ -53,7 +54,7 @@ func Parse(input string) {
 }
 
 func changeJson() {
-	input := `{"a":["b","c"], "status":404}`
+	input := `{"a":["b","c"], "status":404.00}`
 	fmt.Printf("%s\n", input)
 	var m1 map[string]interface{}
 	err := jsoniter.UnmarshalFromString(input, &m1)
@@ -66,6 +67,10 @@ func changeJson() {
 		t[0] = "bbb"
 	} else {
 		fmt.Println("not no no")
+	}
+	i := m1["status"]
+	if a, ok := i.(float64); ok {
+		fmt.Printf("%T-%v\n", i, strconv.FormatFloat(a, 'f', -1, 64))
 	}
 	out, _ := jsoniter.MarshalToString(m1)
 	fmt.Printf("%s\n", out)
